@@ -1,0 +1,57 @@
+networks:
+  db-cluster:
+    driver: bridge
+  redis-cluster:
+    driver: bridge
+  zookeeper-cluster:
+    driver: bridge
+
+services:
+
+  postgres:
+    image: 'postgres:14.2'
+    environment:
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_USER=username
+      - POSTGRES_DB=shortener
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - db-cluster
+
+  redis:
+    image: 'redis:6.2.6'
+    networks:
+      - redis-cluster
+
+  zookeeper:
+    image: 'bitnami/zookeeper:3.6.2'
+    environment:
+      - ALLOW_ANONYMOUS_LOGIN=yes
+    networks:
+      - zookeeper-cluster
+
+  shortener:
+    build: .
+    ports:
+      - '8080:8080'
+    networks:
+      - zookeeper-cluster
+      - db-cluster
+      - redis-cluster
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_started
+      zookeeper:
+        condition: service_started
+    environment:
+      - POSTGRES_HOST=postgres
+      - POSTGRES_USER=username
+      - REDIS_HOST=redis
+      - ZOOKEEPER_HOST=zookeeper
+

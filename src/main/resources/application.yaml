@@ -1,4 +1,7 @@
 spring:
+  redis:
+    host: ${REDIS_HOST:localhost}
+    port: ${REDIS_PORT:6379}
   jpa:
     properties:
       hibernate:
@@ -7,7 +10,7 @@ spring:
       ddl-auto: update
   datasource:
     url: jdbc:postgresql://${POSTGRES_HOST:localhost}:${POSTGRES_PORT:5432}/${POSTGRES_DB:shortener}
-    username: ${POSTGRES_USER:alireza}
+    username: ${POSTGRES_USER:username}
     password: ${POSTGRES_PASSWORD:password}
     hikari:
       maximum-pool-size: 20
