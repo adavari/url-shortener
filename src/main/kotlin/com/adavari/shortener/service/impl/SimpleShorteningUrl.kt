@@ -11,7 +11,8 @@ import java.time.LocalDateTime
 import java.time.ZoneOffset
 
 @Service
-class SimpleShorteningUrl(private val urlService: UrlService, private val sequenceService: SequenceService) :
+class SimpleShorteningUrl(private val urlService: UrlService,
+                          private val sequenceService: SequenceService) :
     ShorteningService {
 
     override suspend fun shortenUrl(originalUrl: String): Url {

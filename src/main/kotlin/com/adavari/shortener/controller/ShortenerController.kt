@@ -8,7 +8,7 @@ import org.springframework.stereotype.Controller
 @Controller
 class ShortenerController(private val shorteningService: ShorteningService) : ShortenerApi {
 
-    override suspend fun shortUrl(urlDto: UrlDto): ShortenedUrlResponse {
+    override suspend fun shortenUrl(urlDto: UrlDto): ShortenedUrlResponse {
         val url = shorteningService.shortenUrl(urlDto.url)
         return ShortenedUrlResponse(shortenedUrl = url.id, originalUrl = url.url)
     }

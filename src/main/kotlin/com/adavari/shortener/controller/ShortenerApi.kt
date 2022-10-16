@@ -12,6 +12,6 @@ interface ShortenerApi {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    suspend fun shortUrl(@Valid @RequestBody urlDto: UrlDto): ShortenedUrlResponse
+    suspend fun shortenUrl(@Valid @RequestBody urlDto: UrlDto): ShortenedUrlResponse
 
 }

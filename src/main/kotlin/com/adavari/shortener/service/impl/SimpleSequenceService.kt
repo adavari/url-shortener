@@ -1,5 +1,7 @@
 package com.adavari.shortener.service.impl
 
+import com.adavari.shortener.exception.EmptyRangeException
+import com.adavari.shortener.exception.InvalidRangeException
 import com.adavari.shortener.service.CoordinationService
 import com.adavari.shortener.service.SequenceService
 import org.springframework.stereotype.Service
@@ -15,11 +17,17 @@ class SimpleSequenceService(private val coordinationService: CoordinationService
         if (currentRange == LongRange.EMPTY) {
             currentRange = coordinationService.getSequenceRange()
         }
+        if (currentRange == LongRange.EMPTY) {
+            throw EmptyRangeException("given range is empty")
+        }
+        if (currentRange.first == currentRange.last) {
+            throw InvalidRangeException("given range is invalid!")
+        }
         if (counter.get() == currentRange.endInclusive) {
             currentRange = coordinationService.getSequenceRange()
         }
 
-        return counter.incrementAndGet();
+        return counter.incrementAndGet()
     }
 
 }
