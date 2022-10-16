@@ -7,7 +7,8 @@ class MD5(private val url: String) {
 
     fun toBytes(): ByteArray {
 
-        return MessageDigest.getInstance("MD5").digest(url.toByteArray(UTF_8))
+        return MessageDigest.getInstance("MD5")
+            .digest(url.toByteArray(UTF_8))
     }
 
 }

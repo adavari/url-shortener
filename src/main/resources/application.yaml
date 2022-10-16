@@ -1,0 +1,27 @@
+spring:
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+    hibernate:
+      ddl-auto: update
+  datasource:
+    url: jdbc:postgresql://${POSTGRES_HOST:localhost}:${POSTGRES_PORT:5432}/${POSTGRES_DB:shortener}
+    username: ${POSTGRES_USER:username}
+    password: ${POSTGRES_PASSWORD:password}
+    hikari:
+      maximum-pool-size: 20
+      leak-detection-threshold: 10000
+
+  cloud:
+    zookeeper:
+      config:
+        enabled: false
+      connect-string: ${ZOOKEEPER_HOST:localhost}:${ZOOKEEPER_PORT:2181}
+management:
+  endpoints:
+    prometheus:
+      enabled: true
+    web:
+      exposure:
+        include: "health,prometheus"
