@@ -5,7 +5,7 @@ In order to keep the project as simple as possible, rate limiting and authentica
 
 ## Features
 ### Shortening the URL
-A short URL is made up of seven Base-64 encoded characters.
+A short URL is made up of seven Base-64 URL-encoded characters.
 This method generates a total of 64 ** 7 short URLs.
 In order to generate a unique string, each URL can be assigned a unique number and hashed using the MD5 algorithm.
 The first seven characters of the hashed number can be extracted
@@ -23,8 +23,8 @@ A failed instance would only result in 50,000 possible URLs, which is quite acce
 graph TD
     A(Shorten a URL) --> B[Get A unique sequence number]
     B --> C{Is There Any Sequence <br/> Range assigned?}
-    C -->|Yes| D{Is reached to the end <br/> of sequence?}
-    C -->|No| E[Get A Sequence from Zookeeper]
+    C -->|Yes| D{Is reached to the end <br/> of the range?}
+    C -->|No| E[Get A Sequence number from Zookeeper]
     E --> D
     D -->|Yes| E
     D -->|No| F[Get a unique number]
@@ -38,7 +38,7 @@ The shortened URLs are used as the database's ID.
 When a user requests a shortened URL, the original URL is easily found by querying the database by ID.
 Redis is used for caching to avoid multiple requests for each URL.
 
-## Starting Project
+## Usage
 Run the following command to start the project:
 
 ```
@@ -55,3 +55,9 @@ Grafana default admin password is foobar.
 
 ![](docs/grafana_panel.png)
 *Grafana Panel*
+
+## API
+| Name        | Path               | Method | Body                                                  | Description                                   | Response                                                                                   |
+|-------------|--------------------|--------|-------------------------------------------------------|-----------------------------------------------|--------------------------------------------------------------------------------------------|
+| Shorten URL | /api/v1/shortening | POST   | { 	"url": "https://github.com/adavari/url-shortener" } | Receives A long URL and generates A short URL | { 	"original_url": "https://github.com/adavari/url-shortener", 	"shortened_url": "a8wdsAl" } |
+| Redirect    | /{short-url}       | GET    | -                                                     | Redirect to original link                     | HTTP 302, with Location in header                                                          |
